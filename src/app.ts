@@ -8,7 +8,7 @@ dotenv.config();
 
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/crimelight';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/crime-light';
 
 app.use(cors());
 app.use(express.json());
