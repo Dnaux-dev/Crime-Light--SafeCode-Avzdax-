@@ -6,7 +6,10 @@
     "dev": "ts-node src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mock:generate": "ts-node scripts/generateMockData.ts generate",
+    "mock:scenario": "ts-node scripts/generateMockData.ts scenario",
+    "mock:clear": "ts-node scripts/generateMockData.ts clear"
   },
   "keywords": [],
   "author": "",
@@ -16,12 +19,16 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose": "^5.11.96",
+    "@types/multer": "^1.4.13",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "ml-matrix": "^6.12.1",
+    "ml-regression": "^6.3.0",
     "mongoose": "^7.6.1",
+    "multer": "^2.0.1",
     "nodemailer": "^6.10.1"
   },
   "devDependencies": {

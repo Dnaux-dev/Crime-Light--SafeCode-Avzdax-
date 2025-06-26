@@ -1,10 +1,12 @@
 // controllers/incidentController.ts
 import { Request, Response } from 'express';
 import Incident, { IIncident } from '../models/incident'; // Import IIncident interface
+import predictionService from '../services/predictionService';
 
 // Extend the Request interface to include the 'user' property from the authenticate middleware
 interface AuthenticatedRequest extends Request {
   user?: { userId: string; role: string };
+  files?: { [fieldname: string]: Express.Multer.File[] };
 }
 
 // Helper function to handle async errors (already in your routes, but good to have)
@@ -16,10 +18,20 @@ const asyncHandler = (fn: any) => (req: any, res: any, next: any) =>
 export const createIncident = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { type, description, latitude, longitude } = req.body;
-    const userId = req.user?.userId; // Get userId from the authenticated user
+    const userId = req.user?.userId; // User must be authenticated
 
     if (!userId) {
       return res.status(401).json({ error: 'User not authenticated or userId missing from token.' });
+    }
+
+    // Handle file uploads
+    let photoPath = undefined;
+    let voiceNotePath = undefined;
+    if (req.files?.photo && req.files.photo[0]) {
+      photoPath = req.files.photo[0].path;
+    }
+    if (req.files?.voiceNote && req.files.voiceNote[0]) {
+      voiceNotePath = req.files.voiceNote[0].path;
     }
 
     const newIncident: IIncident = new Incident({
@@ -28,11 +40,17 @@ export const createIncident = async (req: AuthenticatedRequest, res: Response) =
       latitude,
       longitude,
       userId,
+      photo: photoPath,
+      voiceNote: voiceNotePath,
       timestamp: new Date(),
       status: 'pending',
     });
 
     await newIncident.save();
+
+    // Update risk scores for the prediction engine
+    await predictionService.updateRiskScores(newIncident);
+
     res.status(201).json({ message: 'Incident created successfully', incident: newIncident });
 
   } catch (error) {
