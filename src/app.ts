@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import authRouter from './routes/auth';
+import incidentRoutes from './routes/incidentRoutes';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -20,7 +21,7 @@ mongoose.connect(MONGO_URI)
 
 // Routes
 app.use('/auth', authRouter);
-
+app.use('/api', incidentRoutes); 
 app.get('/', (req: Request, res: Response) => {
   res.send('Crimelight backend is running!');
 });
