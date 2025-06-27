@@ -153,7 +153,7 @@ class PredictionService {
     west: number;
   }): Promise<MapData> {
     try {
-      // Get all incidents from database
+      
       const incidents = await Incident.find({}).sort({ timestamp: -1 });
       
       if (incidents.length === 0) {

@@ -249,7 +249,7 @@ class MLPredictionService {
 
     try {
       const featureVector = Object.values(features);
-      const prediction = this.model.predict(featureVector);
+      const prediction = this.model.predict(featureVector as number[]);
       const riskScore = Math.max(0, Math.min(100, prediction * 100));
       
       // Simple confidence based on feature quality
